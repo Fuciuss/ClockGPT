@@ -16,6 +16,8 @@
 		C2524AFA29C9D53B0053941F /* ClockGPTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2524AF929C9D53B0053941F /* ClockGPTTests.swift */; };
 		C2524B0429C9D53B0053941F /* ClockGPTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2524B0329C9D53B0053941F /* ClockGPTUITests.swift */; };
 		C2524B0629C9D53B0053941F /* ClockGPTUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2524B0529C9D53B0053941F /* ClockGPTUITestsLaunchTests.swift */; };
+		C2524B1329C9D8AE0053941F /* alarm.wav in Resources */ = {isa = PBXBuildFile; fileRef = C2524B1229C9D8AE0053941F /* alarm.wav */; };
+		C2524B1529C9DCD20053941F /* StatusBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2524B1429C9DCD20053941F /* StatusBarItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		C2524AFF29C9D53B0053941F /* ClockGPTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClockGPTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2524B0329C9D53B0053941F /* ClockGPTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockGPTUITests.swift; sourceTree = "<group>"; };
 		C2524B0529C9D53B0053941F /* ClockGPTUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockGPTUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C2524B1229C9D8AE0053941F /* alarm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = alarm.wav; path = ../../../../../Downloads/alarm.wav; sourceTree = "<group>"; };
+		C2524B1429C9DCD20053941F /* StatusBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,11 +105,13 @@
 			children = (
 				C2524AE229C9D53A0053941F /* ClockGPTApp.swift */,
 				C2524AE429C9D53A0053941F /* ContentView.swift */,
+				C2524B1229C9D8AE0053941F /* alarm.wav */,
 				C2524AE629C9D53A0053941F /* Assets.xcassets */,
 				C2524AEB29C9D53A0053941F /* Persistence.swift */,
 				C2524AF029C9D53B0053941F /* ClockGPT.entitlements */,
 				C2524AED29C9D53B0053941F /* ClockGPT.xcdatamodeld */,
 				C2524AE829C9D53A0053941F /* Preview Content */,
+				C2524B1429C9DCD20053941F /* StatusBarItem.swift */,
 			);
 			path = ClockGPT;
 			sourceTree = "<group>";
@@ -240,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2524AEA29C9D53A0053941F /* Preview Assets.xcassets in Resources */,
+				C2524B1329C9D8AE0053941F /* alarm.wav in Resources */,
 				C2524AE729C9D53A0053941F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2524B1529C9DCD20053941F /* StatusBarItem.swift in Sources */,
 				C2524AEF29C9D53B0053941F /* ClockGPT.xcdatamodeld in Sources */,
 				C2524AEC29C9D53A0053941F /* Persistence.swift in Sources */,
 				C2524AE529C9D53A0053941F /* ContentView.swift in Sources */,

@@ -1,85 +1,81 @@
-//
-//  ContentView.swift
-//  ClockGPT
-//
-//  Created by Rees Pawson on 21/3/2023.
-//
-
 import SwiftUI
-import CoreData
+import AVFoundation
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+    @State private var timeRemaining = 0
+    @State private var minutesInput: Double = 0
+    @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var isActive = false
+    @State private var hasRun = false
+    @State private var audioPlayer: AVAudioPlayer?
+    
+    
+    var timeRemainingFormatted: String {
+        let minutes = timeRemaining / 60
+        let seconds = timeRemaining % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
+        VStack {
+            Text("Enter time in minutes:")
+                .font(.title)
+
+//            Time in seconds
+//
+//            TextField("", value: $timeRemaining, formatter: NumberFormatter())
+//                .textFieldStyle(RoundedBorderTextFieldStyle())
+//                .padding()
+            
+//            Time in minutes
+            TextField("", value: $minutesInput, formatter: NumberFormatter())
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            
+
+            Button(action: {
+                timeRemaining = Int(minutesInput * 60)
+                hasRun = true
+                isActive.toggle()
+                if isActive {
+                    timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+                } else {
+                    timer.upstream.connect().cancel()
                 }
-                .onDelete(perform: deleteItems)
+            }, label: {
+                Text(isActive ? "Stop" : "Start")
+                    .frame(width: 200, height: 50)
+                    .background(isActive ? Color.red : Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            })
+
+            Text(timeRemainingFormatted)
+                .font(.largeTitle)
+                .padding(.top, 20)
+
+        }
+        .padding()
+        .onReceive(timer) { _ in
+            if isActive && timeRemaining > 0 {
+                timeRemaining -= 1
+            } else if timeRemaining == 0 && hasRun {
+                isActive = false
+                timer.upstream.connect().cancel()
+                playAlarm()
             }
-            .toolbar {
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
+    func playAlarm() {
+        print("playAlarm")
+        if let soundURL = Bundle.main.url(forResource: "alarm", withExtension: "wav") {
             do {
-                try viewContext.save()
+                audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+                audioPlayer?.play()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                print("Unable to play alarm sound: \(error.localizedDescription)")
             }
         }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-}
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
